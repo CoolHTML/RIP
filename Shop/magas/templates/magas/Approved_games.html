@@ -1,0 +1,12 @@
+{% extends 'magas/main_template.html' %}
+
+
+{% block content %}
+{% for i in my_approved_games %}
+<h3>Игра номер {{i.id}}</h3>
+<a href="{% url 'current_game' i.game_id %}" class="btn btn-primary">Изучить игру</a>
+{% endfor %}
+{% if not my_approved_games %}
+<h1>Нет игр в которые Вас допустили, подайте заявки или дождитесь решения ГМа</h1>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'magas/main_template.html' %}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+}
+span{
+color: #666666;
+    margin-bottom: 12px;
+    line-height: 16px;
+}
+{% block content %}
+<div>
+    <form method="post">
+        {% csrf_token %}
+    <span>Sort by:</span>
+    <select name="sort">
+        {% for i in types %}
+      <option value={{i.1}}>{{i.0}}</option>
+        {% endfor %}
+    </select>
+<span>Sort by:</span>
+    <select name="on/of">
+      <option value=1>Онлайн</option>
+      <option value=2>Оффлайн</option>
+    </select>
+        <span>Показать все игры?</span>
+    <select name="all">
+      <option value=1>Да</option>
+      <option value=2>Нет, сортировать по параметрам</option>
+    </select>
+        <span>Показывать Ваши игры?</span>
+    <select name="my_games">
+      <option value=1>Нет</option>
+      <option value=2>Да</option>
+    </select>
+
+      <button type="submit" >Ololo</button>
+    </form>
+</div>
+{% for i in games %}
+{% if show_my_games == True %}
+{% if value == 0 %}
+<h1></h1>
+{% else %}
+{% if  i.game_type.pk == value and i.is_online == value2 or value3 == 2 %}
+<div style="display:flex;background-color: rebeccapurple;">
+    <div style="margin:auto; width:50%; padding-bottom:30px;padding-top:10px; background-color: rebeccapurple;">
+<div class="row no-gutters bg-light position-relative" style="">
+  <div class="col-md-6 mb-md-0 p-md-4">
+    <img src="/media/default.jpg" class="w-100" alt="...">
+  </div>
+  <div class="col-md-6 position-static p-4 pl-md-0"  style="">
+    <h5 class="mt-0">Игра организована великим мастером {{i.masters_name}}</h5>
+      <div><span>Игроков в игре: </span>{{i.current_number_of_players}}/{{i.number_of_players}}</div>
+
+      <div><span>РИ: </span>{{i.game_type.name}}</div>
+      <div><span>id игры {{ i.pk }}</span></div>
+      {% if i.is_online %}
+      <span>Формат игры: Онлайн</span>
+      {% else %}
+      <span>Формат игры: Оффлайн</span>
+      {% endif %}
+      <div style="overflow: hidden;
+  word-wrap: break-word; max-width: 600px; max-height:218px">
+      </p >Описание игры: {{i.description}}</p>
+      </div>
+  </div>
+      <a href="{% url 'current_game' i.pk %}" class="stretched-link">Кнопочка</a>
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+{% endif %}
+
+{% endif %}
+
+
+{% endfor %}
+
+{% endblock %}

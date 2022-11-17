@@ -1,0 +1,16 @@
+{% extends 'magas/main_template.html' %}
+
+{% block content %}
+<h3 align = "center" style="margin-bottom : 20px">Заполните форму ниже, чтобы объявить игру</h3>
+<form method="post" style="
+    width: 70%;
+    align-items: center;
+    margin: auto;
+    ">{% csrf_token %}
+  <div class="form-group">
+    {{form}}
+  </div>
+  <button type="submit" class="btn btn-primary">Отправить</button>
+
+</form>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'magas/main_template.html' %}
+
+{% block content %}
+<p>Игра организована великим мастером {{game.masters_name}}</p>
+<p>Игроков в игре: {{game.current_number_of_players}}/{{game.number_of_players}}</p>
+<p>Система РИ: {{game.game_type.name}}</p>
+<p>id игры {{ game.pk }}</p>
+
+{% if username != game.masters_name %}
+    {% if not is_in_the_game %}
+<a href = "{% url 'add_page' username game.pk %}">Add me</a>
+    {% else %}
+{% if approved %}
+<h1>Вас допустили до участия в игре, поздравляем!</h1>
+<h2>Для связи с ГМом, он оставил Вам контакт - {{game.contacts}}</h2>
+{% else %}
+    <h1>Вы отправили заявку на игру, свяжитесь с мастером, чтобы он разрешил Вам участвовать</h1>
+    {% endif %}
+    <a href = "{% url 'delete_page' username game.pk %}">Delete me</a>
+    {% endif %}
+
+<p>Описание игры: {{game.description}}</p>
+{% else %}
+<form method="POST">
+{% csrf_token %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Игроки подавшие заявку</th>
+      <th scope="col">Допустить до игры?</th>
+    </tr>
+  </thead>
+      <tbody>
+{% for i in players %}
+    <tr>
+      <th scope="row">{{i.player}}</th>
+        <td>
+        {% if i.approved_to_play %}
+<div class = "form-check">
+    <input class = "form-check-input" type="checkbox" checked="checked" value={{i.pk}} name ="boxes">
+</div>
+        {% else %}
+            <div class = "form-check">
+    <input class = "form-check-input" type="checkbox"  value={{i.pk}} name ="boxes">
+</div>
+        {% endif %}
+</td>
+    </tr>
+{% endfor %}
+      </tbody>
+</table>
+<button type="submit">Допустить выбранных игроков до игры</button>
+</form>
+{% endif %}
+{% endblock %}

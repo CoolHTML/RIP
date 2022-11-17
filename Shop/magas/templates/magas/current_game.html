@@ -1,0 +1,40 @@
+{% extends 'magas/main_template.html' %}
+
+{% block content %}
+{% for i in form %}
+<h3>Ваша игра номер {{i.pk}}</h3>
+<form method="post">
+            {% csrf_token %}
+            {{i.name.label}}
+            {{i.name}}
+            {{i.number_of_players.label}}
+            {{i.number_of_players}}
+            {{i.game_type.label}}
+            {{i.game_type}}
+              <br>
+            {{i.price.label}}
+            {{i.price}}
+              {% if i.is_online.value %}
+
+              <label class="form-label" for="123">Игра онлайн?</label>
+                  <input class="form-check-input me-2" type="checkbox" checked="checked" value ="checked" id="123" disabled="True"/>
+              <br>
+              {% else %}
+              {{i.is_online.label}}
+              {{i.is_online}}
+              <br>
+              {% endif %}
+            {{i.description.label}}
+            {{i.description}}
+            {{i.id.label}}
+            {{i.id}}
+            {{i.contacts.label}}
+    {{i.contacts}}
+
+    <br>
+           <button type="submit" class="btn btn-dark btn-lg">Save Changes</button>
+           <button type="reset" class="btn btn-dark btn-lg">Reset</button>
+        </form>
+<br><br>
+    {% endfor %}
+{% endblock %}
