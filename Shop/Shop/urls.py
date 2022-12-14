@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib import admin
-from magas import views as games_views #оно работает ошибки нет, пайчарм головой стукнулся
+from magas import views as games_views  #оно работает ошибки нет, пайчарм головой стукнулся
 from django.urls import include, path
 from rest_framework import routers
 from rest_framework_nested import routers
@@ -24,14 +24,17 @@ from rest_framework_nested import routers
 
 router = routers.DefaultRouter()
 router.register(r'games', games_views.MyViewSet)
+router.register(r'name', games_views.gamenViewset)
+router.register(r'user', games_views.userViewset)
 # models_router=routers.NestedDefaultRouter(router, r'games', lookup='games')
 # models_router.register(r'models', games_views.ModelsOfTypeViewSet, basename='models-of-type')
-
+router.register(r'bag', games_views.BagViewSet, basename='bag')
+router.register(r'players_in_game', games_views.PlayersInGameViewSet, basename='players_in_game')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('auth/', include('rest_framework.urls')),
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path('auth/', include('rest_framework.urls')),
     path('',include('magas.urls')),
     path('', include(router.urls))
 ]

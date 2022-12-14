@@ -11,10 +11,6 @@ class games_names(models.Model):
     name = models.CharField(max_length=255)
 
 
-class players_in_current_game(models.Model):
-    player = models.CharField(max_length=255, default=None)
-    game_id = models.IntegerField()
-    approved_to_play = models.BooleanField(default=False)
 
 class created_sessions(models.Model):
     masters_name = models.CharField(max_length=255)
@@ -26,6 +22,11 @@ class created_sessions(models.Model):
     is_online = models.BooleanField(default = False)
     contacts = models.CharField(max_length=40, default = '')
 
+class players_in_current_game(models.Model):
+    user = models.IntegerField(default=0)
+    player = models.CharField(max_length=255, default=None)
+    game_id = models.ForeignKey(created_sessions, on_delete=models.CASCADE)
+    approved_to_play = models.BooleanField(default=False)
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 

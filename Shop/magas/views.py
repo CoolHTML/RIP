@@ -12,7 +12,7 @@ from django.contrib import messages
 from rest_framework import viewsets
 from .models import created_sessions
 from rest_framework import viewsets
-from .serializers import created_sessions_ser
+from .serializers import *
 from .models import created_sessions
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -293,11 +293,68 @@ def getJson(request):
         else:
             return HttpResponse("{'status': 'neok'}")
 
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def user(request: Request):
+    return Response({
+        'data': UserSerializer(request.user).data
+    })
 
 class MyViewSet(viewsets.ModelViewSet):
     queryset = created_sessions.objects.all()
     serializer_class = created_sessions_ser
 
+class userViewset(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = usersS
+
+class gamenViewset(viewsets.ModelViewSet):
+    queryset = games_names.objects.all()
+    serializer_class = gametype
+
+class PlayersInGameViewSet(viewsets.ModelViewSet):
+    queryset = players_in_current_game.objects.all()
+    serializer_class = UsersInGameSerializer
+
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+class BagViewSet(viewsets.ModelViewSet):
+    serializer_class = BagSerializer
+
+    def get_queryset(self):
+
+        if self.request.method=='GET':
+            params=self.request.query_params.dict()
+            if 'player' in params:
+                queryset = players_in_current_game.objects.filter(user=params['player'])
+                return queryset
+            print(params)
+        return players_in_current_game.objects.all()
+
+from rest_framework.permissions import AllowAny
+from .serializers import UserSerializer, LoginRequestSerializer
+from django.contrib.auth import authenticate, login
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login(request: Request):
+    serializer = LoginRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        authenticated_user = authenticate(**serializer.validated_data)
+        if authenticated_user is not None:
+            login(request, authenticated_user)
+            return Response({'status': 'Success'})
+        else:
+            return Response({'error': 'Invalid credentials'}, status=403)
+    else:
+        return Response(serializer.errors, status=400)
 
 
 

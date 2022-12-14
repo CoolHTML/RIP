@@ -4,11 +4,18 @@ from django.urls import path, include
 from .views import *
 from django.conf import settings
 from django.urls import include, path
-from rest_framework import routers
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 
 urlpatterns = [
+    path('api/token/obtain', TokenObtainPairView.as_view(), name='token_obtain'),
+    path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/user', user, name='user'),
     path('', mainpage,name = 'main'),
     path('form/',RegisterUser.as_view(),name = 'registration'),
     path('login/',AuthUser.as_view(),name = 'login'),
@@ -25,6 +32,7 @@ urlpatterns = [
     path('addme/<str:player>/<int:id>',add_view,name='add_page'),
     path('profile/approved_games',approved_games,name ='approved_games'),
     path('send_json',getJson,name='getJson'),
+
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

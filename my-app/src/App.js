@@ -4,7 +4,11 @@ import Navbar from './pages/Navbar'
 import RangeType from "./RangeType"
 import CURRGAME from "./games"
 import Registration from "./pages/registration"
-
+import Auth from './autharisation'
+import Logout from './logout'
+import Home from './pages/Home'
+import Bag from './pages/Bag'
+import AddForm from './pages/add'
 export default class Ccomponent extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +19,13 @@ export default class Ccomponent extends Component {
         }
     }
     componentDidMount(){
-        const res = fetch("http://127.0.0.1:8000/games/")
+        const requestOptions = {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                };
+        const res = fetch("http://127.0.0.1:8000/games/", requestOptions)
         .then (res => res.json())
         .then(
 
@@ -51,10 +61,11 @@ export default class Ccomponent extends Component {
           <Switch>
             <Route exact path="/">
               <h1>Это наша стартовая страница</h1>
+              <Home/>
             </Route>
             <Route exact path="/signup">
 
-              <ul>{items.map(item =>(<div style={{boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)", transition: "0.3s", width: "49%",float: "left", display:"block"}}>
+              <ul>{items.map(item =>(<div style={{boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)", transition: "0.3s", minWidth: "500px",float: "left", display:"inline-block", margin:"auto"}}>
   <div style={{padding: "2px 16px"}}>
     <h4><b>{item.masters_name}</b></h4>
     <p style={{}}>Максимальное кол-во игроков: {item.number_of_players}</p>
@@ -72,6 +83,18 @@ export default class Ccomponent extends Component {
             </Route>
                           <Route exact path={"/register"}>
               <Registration/>
+            </Route>
+             <Route exact path={"/auth"}>
+              <Auth/>
+            </Route>
+             <Route exact path={"/logout"}>
+              <Logout/>
+            </Route>
+            <Route exact path={"/bag"}>
+              <Bag/>
+            </Route>
+            <Route exact path={"/add"}>
+            <AddForm/>
             </Route>
           </Switch>
 </BrowserRouter>

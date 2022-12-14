@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt.token_blacklist',
     'magas',
 'rest_framework',
+'rest_framework.authtoken',
 'corsheaders',
 ]
 
@@ -53,7 +55,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'Shop.urls'
 
@@ -161,14 +162,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+ROTATE_REFRESH_TOKENS = True
+BLACKLIST_AFTER_ROTATION = True
+
+ACCESS_TOKEN_LIFETIME = 10000
+REFRESH_TOKEN_LIFETIME = 10000
 #
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-CACHES = {
-     'default': {
-         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-         'LOCATION': '0.0.0.0:11211',
-     }
- }
+
 # #tnmlciogkcfmundv
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.gmail.com'
